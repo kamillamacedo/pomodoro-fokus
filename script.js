@@ -8,6 +8,7 @@ const textStartBtt = document.querySelector(".app__card-primary-button span");
 const bttIcon = document.querySelector(".app__card-primary-button-icon")
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetbtt = document.querySelector(".app__card-reset-button");
+const banner = document.querySelector(".app__image");
 
 let timeInSeconds = 1500;
 let isRunning = false;
@@ -19,6 +20,7 @@ focusbtt.addEventListener("click", () => {
   showTimer();
   removeHighlight();
   focusbtt.classList.add("active");
+  banner.src = "./imagens/foco.png";
 });
 
 shortbtt.addEventListener("click", () => {
@@ -27,6 +29,7 @@ shortbtt.addEventListener("click", () => {
   showTimer();
   removeHighlight();
   shortbtt.classList.add("active");
+  banner.src = "./imagens/descanso-curto.png";
 });
 
 longbtt.addEventListener("click", () => {
@@ -35,6 +38,7 @@ longbtt.addEventListener("click", () => {
   showTimer();
   removeHighlight();
   longbtt.classList.add("active");
+  banner.src = "./imagens/descanso-longo.png";
 });
 
 startbtt.addEventListener("click", toggleTimer);
