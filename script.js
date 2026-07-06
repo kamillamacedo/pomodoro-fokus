@@ -15,14 +15,17 @@ let isRunning = false;
 let intervalId = null;
 
 focusbtt.addEventListener("click", () => {
+  resetTimer();
   changeContext("focus");
 });
 
 shortbtt.addEventListener("click", () => {
+  resetTimer();
   changeContext("short-break");
 });
 
 longbtt.addEventListener("click", () => {
+  resetTimer();
   changeContext("long-break");
 });
 
@@ -98,6 +101,8 @@ function resetTimer() {
   changeContext(currentContext);
 
   resetbtt.classList.add("hidden");
+  textStartBtt.innerText = "Start";
+  bttIcon.src = "./images/play-arrow.png";
 }
 
 function removeHighlight() {
