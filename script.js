@@ -20,7 +20,7 @@ focusbtt.addEventListener("click", () => {
   showTimer();
   removeHighlight();
   focusbtt.classList.add("active");
-  banner.src = "./imagens/foco.png";
+  banner.src = "./images/focus.png";
 });
 
 shortbtt.addEventListener("click", () => {
@@ -29,7 +29,7 @@ shortbtt.addEventListener("click", () => {
   showTimer();
   removeHighlight();
   shortbtt.classList.add("active");
-  banner.src = "./imagens/descanso-curto.png";
+  banner.src = "./images/short-break.png";
 });
 
 longbtt.addEventListener("click", () => {
@@ -38,7 +38,7 @@ longbtt.addEventListener("click", () => {
   showTimer();
   removeHighlight();
   longbtt.classList.add("active");
-  banner.src = "./imagens/descanso-longo.png";
+  banner.src = "./images/long-break.png";
 });
 
 startbtt.addEventListener("click", toggleTimer);
@@ -52,12 +52,12 @@ function toggleTimer() {
     intervalId = null;
     isRunning = false;
     textStartBtt.innerText = "Start";
-    bttIcon.src = "./imagens/play_arrow.png";
+    bttIcon.src = "./images/play-arrow.png";
   } else {
     intervalId = setInterval(startTimer, 1000);
     isRunning = true;
     textStartBtt.innerText = "Pause";
-    bttIcon.src = "./imagens/pause.png";
+    bttIcon.src = "./images/pause.png";
   }
 }
 
