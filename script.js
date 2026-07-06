@@ -14,16 +14,19 @@ let intervalId = null;
 focusbtt.addEventListener('click', () =>{
     html.setAttribute('data-context', 'focus');
     timeInSeconds = 1500;
+    showTimer()
 });
 
 shortbtt.addEventListener('click', () =>{
     html.setAttribute('data-context', 'short-break');
     timeInSeconds = 300;
+    showTimer()
 });
 
 longbtt.addEventListener('click', () =>{
     html.setAttribute('data-context', 'long-break');
     timeInSeconds = 900;
+    showTimer()
 });
 
 startbtt.addEventListener('click', toggleTimer);
@@ -44,7 +47,7 @@ function toggleTimer() {
 
 function startTimer() {
     timeInSeconds -= 1;
-    timerDisplay.innerText = timeInSeconds;
+    showTimer();
     
     if (timeInSeconds === 0) {
         clearInterval(intervalId);
@@ -53,3 +56,13 @@ function startTimer() {
     }
 
 }
+
+function showTimer(){
+    const minutos = Math.floor(timeInSeconds / 60);
+    const segundos = timeInSeconds % 60;
+    const minutosFormatados = String(minutos).padStart(2,'0');
+    const segundosFormatados = String(segundos).padStart(2,'0');
+    timerDisplay.innerText = `${minutosFormatados}:${segundosFormatados}`
+}
+
+showTimer();
