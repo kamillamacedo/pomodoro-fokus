@@ -16,17 +16,14 @@ let intervalId = null;
 
 focusbtt.addEventListener("click", () => {
   changeContext("focus");
-  focusbtt.classList.add("active");
 });
 
 shortbtt.addEventListener("click", () => {
   changeContext("short-break");
-  shortbtt.classList.add("active");
 });
 
 longbtt.addEventListener("click", () => {
   changeContext("long-break");
-  longbtt.classList.add("active");
 });
 
 startbtt.addEventListener("click", toggleTimer);
@@ -40,14 +37,17 @@ function changeContext(context) {
   switch (context) {
     case "focus":
       timeInSeconds = 1500;
+      focusbtt.classList.add("active");
       break;
 
     case "short-break":
       timeInSeconds = 300;
+      shortbtt.classList.add("active");
       break;
 
     case "long-break":
       timeInSeconds = 900;
+      longbtt.classList.add("active");
       break;
   }
   showTimer();
@@ -94,15 +94,9 @@ function resetTimer() {
   clearInterval(intervalId);
   intervalId = null;
   isRunning = false;
-  if (html.getAttribute("data-context") === "focus") {
-    timeInSeconds = 1500;
-  } else if (html.getAttribute("data-context") === "short-break") {
-    timeInSeconds = 300;
-  } else if (html.getAttribute("data-context") === "long-break") {
-    timeInSeconds = 900;
-  }
+  const currentContext = html.getAttribute("data-context");
+  changeContext(currentContext);
 
-  showTimer();
   resetbtt.classList.add("hidden");
 }
 
