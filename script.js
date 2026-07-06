@@ -1,4 +1,5 @@
 const html = document.querySelector("html");
+const btts = document.querySelectorAll(".app__card-button");
 const focusbtt = document.querySelector(".app__card-button--focus");
 const shortbtt = document.querySelector(".app__card-button--short");
 const longbtt = document.querySelector(".app__card-button--long");
@@ -14,18 +15,24 @@ focusbtt.addEventListener("click", () => {
   html.setAttribute("data-context", "focus");
   timeInSeconds = 1500;
   showTimer();
+  removeHighlight();
+  focusbtt.classList.add("active");
 });
 
 shortbtt.addEventListener("click", () => {
   html.setAttribute("data-context", "short-break");
   timeInSeconds = 300;
   showTimer();
+  removeHighlight();
+  shortbtt.classList.add("active");
 });
 
 longbtt.addEventListener("click", () => {
   html.setAttribute("data-context", "long-break");
   timeInSeconds = 900;
   showTimer();
+  removeHighlight();
+  longbtt.classList.add("active");
 });
 
 startbtt.addEventListener("click", toggleTimer);
@@ -80,4 +87,10 @@ function resetTimer() {
 
   showTimer()
   resetbtt.classList.add("hidden");
+}
+
+function removeHighlight() {
+    btts.forEach(btt=> {
+        btt.classList.remove("active")
+    });
 }
