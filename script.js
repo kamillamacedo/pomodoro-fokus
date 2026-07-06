@@ -4,6 +4,8 @@ const focusbtt = document.querySelector(".app__card-button--focus");
 const shortbtt = document.querySelector(".app__card-button--short");
 const longbtt = document.querySelector(".app__card-button--long");
 const startbtt = document.querySelector(".app__card-primary-button");
+const textStartBtt = document.querySelector(".app__card-primary-button span");
+const bttIcon = document.querySelector(".app__card-primary-button-icon")
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetbtt = document.querySelector(".app__card-reset-button");
 
@@ -40,15 +42,18 @@ startbtt.addEventListener("click", toggleTimer);
 resetbtt.addEventListener("click", resetTimer);
 
 function toggleTimer() {
+    resetbtt.classList.remove("hidden");
   if (isRunning === true) {
     clearInterval(intervalId);
     intervalId = null;
     isRunning = false;
-    resetbtt.classList.add("hidden");
+    textStartBtt.innerText = "Start";
+    bttIcon.src = "./imagens/play_arrow.png";
   } else {
     intervalId = setInterval(startTimer, 1000);
     isRunning = true;
-    resetbtt.classList.remove("hidden");
+    textStartBtt.innerText = "Pause";
+    bttIcon.src = "./imagens/pause.png";
   }
 }
 
@@ -81,16 +86,16 @@ function resetTimer() {
     timeInSeconds = 1500;
   } else if (html.getAttribute("data-context") === "short-break") {
     timeInSeconds = 300;
-  } else if (html.getAttribute("data-context") === "long-break"){
+  } else if (html.getAttribute("data-context") === "long-break") {
     timeInSeconds = 900;
   }
 
-  showTimer()
+  showTimer();
   resetbtt.classList.add("hidden");
 }
 
 function removeHighlight() {
-    btts.forEach(btt=> {
-        btt.classList.remove("active")
-    });
+  btts.forEach((btt) => {
+    btt.classList.remove("active");
+  });
 }
