@@ -5,7 +5,7 @@ const shortbtt = document.querySelector(".app__card-button--short");
 const longbtt = document.querySelector(".app__card-button--long");
 const startbtt = document.querySelector(".app__card-primary-button");
 const textStartBtt = document.querySelector(".app__card-primary-button span");
-const bttIcon = document.querySelector(".app__card-primary-button-icon")
+const bttIcon = document.querySelector(".app__card-primary-button-icon");
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetbtt = document.querySelector(".app__card-reset-button");
 const banner = document.querySelector(".app__image");
@@ -15,38 +15,46 @@ let isRunning = false;
 let intervalId = null;
 
 focusbtt.addEventListener("click", () => {
-  html.setAttribute("data-context", "focus");
-  timeInSeconds = 1500;
-  showTimer();
-  removeHighlight();
+  changeContext("focus");
   focusbtt.classList.add("active");
-  banner.src = "./images/focus.png";
 });
 
 shortbtt.addEventListener("click", () => {
-  html.setAttribute("data-context", "short-break");
-  timeInSeconds = 300;
-  showTimer();
-  removeHighlight();
+  changeContext("short-break");
   shortbtt.classList.add("active");
-  banner.src = "./images/short-break.png";
 });
 
 longbtt.addEventListener("click", () => {
-  html.setAttribute("data-context", "long-break");
-  timeInSeconds = 900;
-  showTimer();
-  removeHighlight();
+  changeContext("long-break");
   longbtt.classList.add("active");
-  banner.src = "./images/long-break.png";
 });
 
 startbtt.addEventListener("click", toggleTimer);
 
 resetbtt.addEventListener("click", resetTimer);
 
+function changeContext(context) {
+  removeHighlight();
+  html.setAttribute("data-context", context);
+  banner.src = `./images/${context}.png`;
+  switch (context) {
+    case "focus":
+      timeInSeconds = 1500;
+      break;
+
+    case "short-break":
+      timeInSeconds = 300;
+      break;
+
+    case "long-break":
+      timeInSeconds = 900;
+      break;
+  }
+  showTimer();
+}
+
 function toggleTimer() {
-    resetbtt.classList.remove("hidden");
+  resetbtt.classList.remove("hidden");
   if (isRunning === true) {
     clearInterval(intervalId);
     intervalId = null;
