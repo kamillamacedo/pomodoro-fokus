@@ -80,10 +80,10 @@ function changeContext(context) {
       break;
   }
   showTimer();
+  updateResetButtonVisibility();
 }
 
 function toggleTimer() {
-  resetBtt.classList.remove("hidden");
   if (isRunning === true) {
     clearInterval(intervalId);
     intervalId = null;
@@ -92,6 +92,7 @@ function toggleTimer() {
     bttIcon.src = "./images/play-arrow.png";
   } else {
     intervalId = setInterval(startTimer, 1000);
+    startTimer();
     isRunning = true;
     textStartBtt.innerText = "Pause";
     bttIcon.src = "./images/pause.png";
@@ -100,6 +101,7 @@ function toggleTimer() {
 
 function startTimer() {
   timeInSeconds -= 1;
+  updateResetButtonVisibility();
   const currentContext = html.getAttribute("data-context");
   if (currentContext === "focus") {
     focusTime = timeInSeconds;
@@ -135,9 +137,10 @@ function resetTimer() {
   const currentContext = html.getAttribute("data-context");
   changeContext(currentContext);
 
-  resetBtt.classList.add("hidden");
   textStartBtt.innerText = "Start";
   bttIcon.src = "./images/play-arrow.png";
+
+  updateResetButtonVisibility();
 }
 
 function removeHighlight() {
@@ -145,3 +148,18 @@ function removeHighlight() {
     btt.classList.remove("active");
   });
 }
+
+function updateResetButtonVisibility(){
+  const currentContext = html.getAttribute("data-context");
+  if ((currentContext === "focus") && (timeInSeconds !== 1500)) {
+    resetBtt.classList.remove("hidden");
+  } else if ((currentContext === "short-break") && (timeInSeconds !== 300)){
+    resetBtt.classList.remove("hidden");
+  } else if ((currentContext === "long-break") && (timeInSeconds !== 900)){
+    resetBtt.classList.remove("hidden");
+  } else{
+    resetBtt.classList.add("hidden");
+  }
+}
+
+updateResetButtonVisibility();
