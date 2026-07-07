@@ -9,6 +9,7 @@ const bttIcon = document.querySelector(".app__card-primary-button-icon");
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetbtt = document.querySelector(".app__card-reset-button");
 const banner = document.querySelector(".app__image");
+const title = document.querySelector(".app__title");
 
 let timeInSeconds = 1500;
 let isRunning = false;
@@ -41,16 +42,24 @@ function changeContext(context) {
     case "focus":
       timeInSeconds = 1500;
       focusbtt.classList.add("active");
+      title.innerHTML = `Optimize your productivity,<br>
+                <strong class="app__title-strong">dive into what matters.</strong>`;
       break;
 
     case "short-break":
       timeInSeconds = 300;
       shortbtt.classList.add("active");
+      title.innerHTML = `Why don't you take a breath?<br>
+                <strong class="app__title-strong">Take a short break!</strong>`;
       break;
 
     case "long-break":
       timeInSeconds = 900;
       longbtt.classList.add("active");
+      title.innerHTML = `Time to come up for air.<br>
+                <strong class="app__title-strong">Take an extended break.</strong>`;
+      break;
+    default:
       break;
   }
   showTimer();
