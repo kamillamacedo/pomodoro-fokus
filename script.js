@@ -10,8 +10,13 @@ const timerDisplay = document.querySelector(".app__card-timer");
 const resetBtt = document.querySelector(".app__card-reset-button");
 const banner = document.querySelector(".app__image");
 const title = document.querySelector(".app__title");
+const musicInput = document.querySelector(".toggle-checkbox");
 
-let timeInSeconds = 1500;
+let focusTime = 1500;
+let shortBreakTime = 300;
+let longBreakTime = 900;
+let timeInSeconds = focusTime;
+
 let isRunning = false;
 let intervalId = null;
 
@@ -32,7 +37,19 @@ longBtt.addEventListener("click", () => {
 
 startBtt.addEventListener("click", toggleTimer);
 
-resetBtt.addEventListener("click", resetTimer);
+resetBtt.addEventListener("click", () =>{ 
+  
+  const currentContext = html.getAttribute("data-context"); 
+
+  if (currentContext === "focus") {
+    focusTime = 1500;
+  } else if (currentContext === "short-break") {
+    shortBreakTime = 300;
+  } else if (currentContext === "long-break") {
+    longBreakTime = 900;
+  }
+  
+  resetTimer();});
 
 function changeContext(context) {
   removeHighlight();
@@ -40,21 +57,21 @@ function changeContext(context) {
   banner.src = `./images/${context}.png`;
   switch (context) {
     case "focus":
-      timeInSeconds = 1500;
+      timeInSeconds = focusTime;
       focusBtt.classList.add("active");
       title.innerHTML = `Optimize your productivity,<br>
                 <strong class="app__title-strong">dive into what matters.</strong>`;
       break;
 
     case "short-break":
-      timeInSeconds = 300;
+      timeInSeconds = shortBreakTime;
       shortBtt.classList.add("active");
       title.innerHTML = `Why don't you take a breath?<br>
                 <strong class="app__title-strong">Take a short break!</strong>`;
       break;
 
     case "long-break":
-      timeInSeconds = 900;
+      timeInSeconds = longBreakTime;
       longBtt.classList.add("active");
       title.innerHTML = `Time to come up for air.<br>
                 <strong class="app__title-strong">Take an extended break.</strong>`;
@@ -83,6 +100,15 @@ function toggleTimer() {
 
 function startTimer() {
   timeInSeconds -= 1;
+  const currentContext = html.getAttribute("data-context");
+  if (currentContext === "focus") {
+    focusTime = timeInSeconds;
+  } else if (currentContext === "short-break") {
+    shortBreakTime = timeInSeconds;
+  } else if (currentContext === "long-break") {
+    longBreakTime = timeInSeconds;
+  };
+
   showTimer();
 
   if (timeInSeconds === 0) {
