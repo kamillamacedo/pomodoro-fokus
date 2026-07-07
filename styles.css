@@ -32,7 +32,7 @@ html {
 
 body {
     min-height: 100vh;
-    background: url("/imagens/pattern.png");
+    background: url("/images/pattern.png");
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -137,6 +137,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .app__card-primary-button-wrapper {
     display: flex;
+    gap:30px;
     align-items: center;
     justify-content: center;
 }
@@ -156,6 +157,14 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+}
+
+.app__card-reset-button {
+    background: #746e6e;
+}
+
+.hidden{
+    display: none;
 }
 
 .app__footer {
