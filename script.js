@@ -1,13 +1,13 @@
 const html = document.querySelector("html");
 const btts = document.querySelectorAll(".app__card-button");
-const focusbtt = document.querySelector(".app__card-button--focus");
-const shortbtt = document.querySelector(".app__card-button--short");
-const longbtt = document.querySelector(".app__card-button--long");
-const startbtt = document.querySelector(".app__card-primary-button");
+const focusBtt = document.querySelector(".app__card-button--focus");
+const shortBtt = document.querySelector(".app__card-button--short");
+const longBtt = document.querySelector(".app__card-button--long");
+const startBtt = document.querySelector(".app__card-primary-button");
 const textStartBtt = document.querySelector(".app__card-primary-button span");
 const bttIcon = document.querySelector(".app__card-primary-button-icon");
 const timerDisplay = document.querySelector(".app__card-timer");
-const resetbtt = document.querySelector(".app__card-reset-button");
+const resetBtt = document.querySelector(".app__card-reset-button");
 const banner = document.querySelector(".app__image");
 const title = document.querySelector(".app__title");
 
@@ -15,24 +15,24 @@ let timeInSeconds = 1500;
 let isRunning = false;
 let intervalId = null;
 
-focusbtt.addEventListener("click", () => {
+focusBtt.addEventListener("click", () => {
   resetTimer();
   changeContext("focus");
 });
 
-shortbtt.addEventListener("click", () => {
+shortBtt.addEventListener("click", () => {
   resetTimer();
   changeContext("short-break");
 });
 
-longbtt.addEventListener("click", () => {
+longBtt.addEventListener("click", () => {
   resetTimer();
   changeContext("long-break");
 });
 
-startbtt.addEventListener("click", toggleTimer);
+startBtt.addEventListener("click", toggleTimer);
 
-resetbtt.addEventListener("click", resetTimer);
+resetBtt.addEventListener("click", resetTimer);
 
 function changeContext(context) {
   removeHighlight();
@@ -41,21 +41,21 @@ function changeContext(context) {
   switch (context) {
     case "focus":
       timeInSeconds = 1500;
-      focusbtt.classList.add("active");
+      focusBtt.classList.add("active");
       title.innerHTML = `Optimize your productivity,<br>
                 <strong class="app__title-strong">dive into what matters.</strong>`;
       break;
 
     case "short-break":
       timeInSeconds = 300;
-      shortbtt.classList.add("active");
+      shortBtt.classList.add("active");
       title.innerHTML = `Why don't you take a breath?<br>
                 <strong class="app__title-strong">Take a short break!</strong>`;
       break;
 
     case "long-break":
       timeInSeconds = 900;
-      longbtt.classList.add("active");
+      longBtt.classList.add("active");
       title.innerHTML = `Time to come up for air.<br>
                 <strong class="app__title-strong">Take an extended break.</strong>`;
       break;
@@ -66,7 +66,7 @@ function changeContext(context) {
 }
 
 function toggleTimer() {
-  resetbtt.classList.remove("hidden");
+  resetBtt.classList.remove("hidden");
   if (isRunning === true) {
     clearInterval(intervalId);
     intervalId = null;
@@ -109,7 +109,7 @@ function resetTimer() {
   const currentContext = html.getAttribute("data-context");
   changeContext(currentContext);
 
-  resetbtt.classList.add("hidden");
+  resetBtt.classList.add("hidden");
   textStartBtt.innerText = "Start";
   bttIcon.src = "./images/play-arrow.png";
 }
