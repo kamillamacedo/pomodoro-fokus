@@ -65,6 +65,7 @@ resetBtt.addEventListener("click", () => {
   }
 
   resetTimer();
+  updateStartPauseButtonState();
 });
 
 function changeContext(context) {
@@ -97,6 +98,7 @@ function changeContext(context) {
   }
   showTimer();
   updateResetButtonVisibility();
+  updateStartPauseButtonState();
 }
 
 function toggleTimer() {
@@ -131,6 +133,7 @@ function startTimer() {
 
   if (timeInSeconds <= 0) {
     stopCountDown();
+    updateStartPauseButtonState();
     textStartBtt.innerText = "Start";
     bttIcon.src = "./images/play-arrow.png";
     endSound.play();
@@ -188,3 +191,11 @@ function updateResetButtonVisibility() {
 }
 
 updateResetButtonVisibility();
+
+function updateStartPauseButtonState() {
+  if (timeInSeconds <= 0) {
+    startPauseBtt.disabled = true;
+  } else {
+    startPauseBtt.disabled = false;
+  }
+}
