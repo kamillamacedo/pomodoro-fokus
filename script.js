@@ -3,14 +3,24 @@ const btts = document.querySelectorAll(".app__card-button");
 const focusBtt = document.querySelector(".app__card-button--focus");
 const shortBtt = document.querySelector(".app__card-button--short");
 const longBtt = document.querySelector(".app__card-button--long");
-const startBtt = document.querySelector(".app__card-primary-button");
+const startPauseBtt = document.querySelector(".app__card-primary-button");
 const textStartBtt = document.querySelector(".app__card-primary-button span");
 const bttIcon = document.querySelector(".app__card-primary-button-icon");
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetBtt = document.querySelector(".app__card-reset-button");
 const banner = document.querySelector(".app__image");
 const title = document.querySelector(".app__title");
-const musicInput = document.querySelector(".toggle-checkbox");
+const musicFocusInput = document.querySelector(".toggle-checkbox");
+const music = new Audio("/sounds/luna-rise-part-one.mp3");
+music.loop = true;
+
+musicFocusInput.addEventListener("change", () =>{
+  if(music.paused){
+    music.play()
+  } else {
+    music.pause()
+  }
+})
 
 let focusTime = 1500;
 let shortBreakTime = 300;
@@ -35,7 +45,7 @@ longBtt.addEventListener("click", () => {
   changeContext("long-break");
 });
 
-startBtt.addEventListener("click", toggleTimer);
+startPauseBtt.addEventListener("click", toggleTimer);
 
 resetBtt.addEventListener("click", () =>{ 
   
