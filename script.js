@@ -12,15 +12,21 @@ const banner = document.querySelector(".app__image");
 const title = document.querySelector(".app__title");
 const musicFocusInput = document.querySelector(".toggle-checkbox");
 const music = new Audio("/sounds/luna-rise-part-one.mp3");
-music.loop = true;
+const endSound = new Audio("/sounds/achievement.mp3");
+const startSound = new Audio("/sounds/play.wav");
+const pauseSound = new Audio("/sounds/pause.mp3");
 
-musicFocusInput.addEventListener("change", () =>{
-  if(music.paused){
-    music.play()
+music.loop = true;
+endSound.loop = true;
+startSound.volume = 0.5;
+
+musicFocusInput.addEventListener("change", () => {
+  if (music.paused) {
+    music.play();
   } else {
-    music.pause()
+    music.pause();
   }
-})
+});
 
 let focusTime = 1500;
 let shortBreakTime = 300;
@@ -47,9 +53,8 @@ longBtt.addEventListener("click", () => {
 
 startPauseBtt.addEventListener("click", toggleTimer);
 
-resetBtt.addEventListener("click", () =>{ 
-  
-  const currentContext = html.getAttribute("data-context"); 
+resetBtt.addEventListener("click", () => {
+  const currentContext = html.getAttribute("data-context");
 
   if (currentContext === "focus") {
     focusTime = 1500;
@@ -58,8 +63,9 @@ resetBtt.addEventListener("click", () =>{
   } else if (currentContext === "long-break") {
     longBreakTime = 900;
   }
-  
-  resetTimer();});
+
+  resetTimer();
+});
 
 function changeContext(context) {
   removeHighlight();
@@ -95,17 +101,17 @@ function changeContext(context) {
 
 function toggleTimer() {
   if (isRunning === true) {
-    clearInterval(intervalId);
-    intervalId = null;
-    isRunning = false;
+    stopCountDown();
     textStartBtt.innerText = "Start";
     bttIcon.src = "./images/play-arrow.png";
+    pauseSound.play();
   } else {
     intervalId = setInterval(startTimer, 1000);
     startTimer();
     isRunning = true;
     textStartBtt.innerText = "Pause";
     bttIcon.src = "./images/pause.png";
+    startSound.play();
   }
 }
 
@@ -119,15 +125,26 @@ function startTimer() {
     shortBreakTime = timeInSeconds;
   } else if (currentContext === "long-break") {
     longBreakTime = timeInSeconds;
-  };
+  }
 
   showTimer();
 
-  if (timeInSeconds === 0) {
-    clearInterval(intervalId);
-    intervalId = null;
-    isRunning = false;
+  if (timeInSeconds <= 0) {
+    stopCountDown();
+    textStartBtt.innerText = "Start";
+    bttIcon.src = "./images/play-arrow.png";
+    endSound.play();
+    setTimeout(() => {
+      endSound.pause();
+      endSound.loop = false;
+    }, 6000);
   }
+}
+
+function stopCountDown() {
+  clearInterval(intervalId);
+  intervalId = null;
+  isRunning = false;
 }
 
 function showTimer() {
@@ -141,9 +158,7 @@ function showTimer() {
 showTimer();
 
 function resetTimer() {
-  clearInterval(intervalId);
-  intervalId = null;
-  isRunning = false;
+  stopCountDown();
   const currentContext = html.getAttribute("data-context");
   changeContext(currentContext);
 
@@ -159,15 +174,15 @@ function removeHighlight() {
   });
 }
 
-function updateResetButtonVisibility(){
+function updateResetButtonVisibility() {
   const currentContext = html.getAttribute("data-context");
-  if ((currentContext === "focus") && (timeInSeconds !== 1500)) {
+  if (currentContext === "focus" && timeInSeconds !== 1500) {
     resetBtt.classList.remove("hidden");
-  } else if ((currentContext === "short-break") && (timeInSeconds !== 300)){
+  } else if (currentContext === "short-break" && timeInSeconds !== 300) {
     resetBtt.classList.remove("hidden");
-  } else if ((currentContext === "long-break") && (timeInSeconds !== 900)){
+  } else if (currentContext === "long-break" && timeInSeconds !== 900) {
     resetBtt.classList.remove("hidden");
-  } else{
+  } else {
     resetBtt.classList.add("hidden");
   }
 }
