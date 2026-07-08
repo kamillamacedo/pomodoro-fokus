@@ -4,7 +4,7 @@ const focusBtt = document.querySelector(".app__card-button--focus");
 const shortBtt = document.querySelector(".app__card-button--short");
 const longBtt = document.querySelector(".app__card-button--long");
 const startPauseBtt = document.querySelector(".app__card-primary-button");
-const textStartBtt = document.querySelector(".app__card-primary-button span");
+const textStartPauseBtt = document.querySelector(".app__card-primary-button span");
 const bttIcon = document.querySelector(".app__card-primary-button-icon");
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetBtt = document.querySelector(".app__card-reset-button");
@@ -104,14 +104,14 @@ function changeContext(context) {
 function toggleTimer() {
   if (isRunning === true) {
     stopCountDown();
-    textStartBtt.innerText = "Start";
+    textStartPauseBtt.innerText = "Start";
     bttIcon.src = "./images/play-arrow.png";
     pauseSound.play();
   } else {
     intervalId = setInterval(startTimer, 1000);
     startTimer();
     isRunning = true;
-    textStartBtt.innerText = "Pause";
+    textStartPauseBtt.innerText = "Pause";
     bttIcon.src = "./images/pause.png";
     startSound.play();
   }
@@ -134,7 +134,7 @@ function startTimer() {
   if (timeInSeconds <= 0) {
     stopCountDown();
     updateStartPauseButtonState();
-    textStartBtt.innerText = "Start";
+    textStartPauseBtt.innerText = "Start";
     bttIcon.src = "./images/play-arrow.png";
     endSound.play();
     setTimeout(() => {
@@ -165,7 +165,7 @@ function resetTimer() {
   const currentContext = html.getAttribute("data-context");
   changeContext(currentContext);
 
-  textStartBtt.innerText = "Start";
+  textStartPauseBtt.innerText = "Start";
   bttIcon.src = "./images/play-arrow.png";
 
   updateResetButtonVisibility();
