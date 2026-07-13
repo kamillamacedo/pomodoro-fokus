@@ -1,8 +1,11 @@
 const addTaskBtt = document.querySelector(".app__button--add-task");
 const formAddTask = document.querySelector(".app__form-add-task ");
-const formTaskLabel = document.querySelector(".app__form-label")
+const formTaskLabel = document.querySelector(".app__form-label");
 const textareaTask = document.querySelector(".app__form-textarea");
 const tasksListDisplay = document.querySelector(".app__section-task-list");
+const taskDescriptionParagraph = document.querySelector(
+  ".app__section-active-task-description",
+);
 
 const deleteTaskBtt = document.querySelector(
   ".app__form-footer__button--delete",
@@ -64,14 +67,14 @@ function createTaskElement(task) {
 
   const button = document.createElement("button");
   button.classList.add("app_button-edit");
-  
+
   button.onclick = () => {
     textareaTask.value = task.description;
     formAddTask.classList.remove("hidden");
     formTaskLabel.innerText = "Editing task:";
     selectedTask = task;
-  }
-  
+  };
+
   const buttonImg = document.createElement("img");
   buttonImg.src = "./images/edit.png";
   button.append(buttonImg);
@@ -79,6 +82,23 @@ function createTaskElement(task) {
   li.append(svg);
   li.append(paragraph);
   li.append(button);
+
+  li.onclick = () => {
+    const activeElement = document.querySelector(
+      ".app__section-task-list-item-active",
+    );
+    if (activeElement === li) {
+      activeElement.classList.remove("app__section-task-list-item-active");
+      taskDescriptionParagraph.textContent = "";
+      return;
+    }
+
+    if (activeElement) {
+      activeElement.classList.remove("app__section-task-list-item-active");
+    }
+    taskDescriptionParagraph.textContent = task.description;
+    li.classList.add("app__section-task-list-item-active");
+  };
 
   return li;
 }
