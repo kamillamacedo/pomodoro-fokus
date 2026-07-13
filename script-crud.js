@@ -1,5 +1,6 @@
 const addTaskBtt = document.querySelector(".app__button--add-task");
 const formAddTask = document.querySelector(".app__form-add-task ");
+const formTaskLabel = document.querySelector(".app__form-label")
 const textareaTask = document.querySelector(".app__form-textarea");
 const tasksListDisplay = document.querySelector(".app__section-task-list");
 
@@ -15,8 +16,13 @@ const saveTaskBtt = document.querySelector(
 
 const tasksList = JSON.parse(localStorage.getItem("tasks")) || [];
 
+let selectedTask = null;
+
 addTaskBtt.addEventListener("click", () => {
   formAddTask.classList.toggle("hidden");
+  textareaTask.value = "";
+  formTaskLabel.innerText = "Adding task:";
+  selectedTask = null;
 });
 
 formAddTask.addEventListener("submit", (event) => {
@@ -25,13 +31,17 @@ formAddTask.addEventListener("submit", (event) => {
   const task = {
     description: textareaTask.value,
   };
-
-  tasksList.push(task);
+  if (selectedTask === null) {
+    tasksList.push(task);
+  } else {
+    selectedTask.description = textareaTask.value;
+  }
 
   const tasksListInText = JSON.stringify(tasksList);
   localStorage.setItem("tasks", tasksListInText);
 
   textareaTask.value = "";
+  selectedTask = null;
   formAddTask.classList.add("hidden");
 
   renderTasksList();
@@ -53,8 +63,16 @@ function createTaskElement(task) {
   paragraph.classList.add("app__section-task-list-item-description");
 
   const button = document.createElement("button");
-  const buttonImg = document.createElement("img");
   button.classList.add("app_button-edit");
+  
+  button.onclick = () => {
+    textareaTask.value = task.description;
+    formAddTask.classList.remove("hidden");
+    formTaskLabel.innerText = "Editing task:";
+    selectedTask = task;
+  }
+  
+  const buttonImg = document.createElement("img");
   buttonImg.src = "./images/edit.png";
   button.append(buttonImg);
 
