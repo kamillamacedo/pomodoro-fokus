@@ -3,22 +3,12 @@ const formAddTask = document.querySelector(".app__form-add-task ");
 const formTaskLabel = document.querySelector(".app__form-label");
 const textareaTask = document.querySelector(".app__form-textarea");
 const tasksListDisplay = document.querySelector(".app__section-task-list");
-const taskDescriptionParagraph = document.querySelector(
-  ".app__section-active-task-description",
-);
+const taskDescriptionParagraph = document.querySelector(".app__section-active-task-description");
+const deleteTaskBtt = document.querySelector(".app__form-footer__button--delete");
+const cancelTaskBtt = document.querySelector(".app__form-footer__button--cancel");
+const saveTaskBtt = document.querySelector(".app__form-footer__button--confirm");
 
-const deleteTaskBtt = document.querySelector(
-  ".app__form-footer__button--delete",
-);
-const cancelTaskBtt = document.querySelector(
-  ".app__form-footer__button--cancel",
-);
-const saveTaskBtt = document.querySelector(
-  ".app__form-footer__button--confirm",
-);
-
-const tasksList = JSON.parse(localStorage.getItem("tasks")) || [];
-
+let tasksList = JSON.parse(localStorage.getItem("tasks")) || [];
 let selectedTask = null;
 
 addTaskBtt.addEventListener("click", () => {
@@ -49,6 +39,14 @@ formAddTask.addEventListener("submit", (event) => {
 });
 
 cancelTaskBtt.addEventListener("click", clearForm);
+
+deleteTaskBtt.addEventListener("click", ()=>{
+  tasksList = tasksList.filter(task => task !== selectedTask);
+  const tasksListInText = JSON.stringify(tasksList);
+  localStorage.setItem("tasks", tasksListInText);
+  clearForm();
+  renderTasksList();
+});
 
 function createTaskElement(task) {
   const li = document.createElement("li");
