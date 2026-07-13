@@ -40,12 +40,12 @@ formAddTask.addEventListener("submit", (event) => {
   const tasksListInText = JSON.stringify(tasksList);
   localStorage.setItem("tasks", tasksListInText);
 
-  textareaTask.value = "";
-  selectedTask = null;
-  formAddTask.classList.add("hidden");
+  clearForm();
 
   renderTasksList();
 });
+
+cancelTaskBtt.addEventListener("click", clearForm);
 
 function createTaskElement(task) {
   const li = document.createElement("li");
@@ -92,3 +92,9 @@ function renderTasksList() {
 }
 
 renderTasksList();
+
+function clearForm() {
+  textareaTask.value = "";
+  selectedTask = null;
+  formAddTask.classList.add("hidden");
+}
