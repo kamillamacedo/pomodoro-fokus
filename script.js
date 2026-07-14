@@ -4,7 +4,9 @@ const focusBtt = document.querySelector(".app__card-button--focus");
 const shortBtt = document.querySelector(".app__card-button--short");
 const longBtt = document.querySelector(".app__card-button--long");
 const startPauseBtt = document.querySelector(".app__card-primary-button");
-const textStartPauseBtt = document.querySelector(".app__card-primary-button span");
+const textStartPauseBtt = document.querySelector(
+  ".app__card-primary-button span",
+);
 const bttIcon = document.querySelector(".app__card-primary-button-icon");
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetBtt = document.querySelector(".app__card-reset-button");
@@ -20,15 +22,7 @@ music.loop = true;
 endSound.loop = true;
 startSound.volume = 0.5;
 
-musicFocusInput.addEventListener("change", () => {
-  if (music.paused) {
-    music.play();
-  } else {
-    music.pause();
-  }
-});
-
-let focusTime = 1500;
+let focusTime = 15;
 let shortBreakTime = 300;
 let longBreakTime = 900;
 let timeInSeconds = focusTime;
@@ -66,6 +60,14 @@ resetBtt.addEventListener("click", () => {
 
   resetTimer();
   updateStartPauseButtonState();
+});
+
+musicFocusInput.addEventListener("change", () => {
+  if (music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
 });
 
 function changeContext(context) {
@@ -141,6 +143,11 @@ function startTimer() {
       endSound.pause();
       endSound.loop = false;
     }, 6000);
+
+    if (currentContext === "focus") {
+      const event = new CustomEvent("focusEnd");
+      document.dispatchEvent(event);
+    }
   }
 }
 

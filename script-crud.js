@@ -3,13 +3,23 @@ const formAddTask = document.querySelector(".app__form-add-task ");
 const formTaskLabel = document.querySelector(".app__form-label");
 const textareaTask = document.querySelector(".app__form-textarea");
 const tasksListDisplay = document.querySelector(".app__section-task-list");
-const taskDescriptionParagraph = document.querySelector(".app__section-active-task-description");
-const deleteTaskBtt = document.querySelector(".app__form-footer__button--delete");
-const cancelTaskBtt = document.querySelector(".app__form-footer__button--cancel");
-const saveTaskBtt = document.querySelector(".app__form-footer__button--confirm");
+const taskDescriptionParagraph = document.querySelector(
+  ".app__section-active-task-description",
+);
+const deleteTaskBtt = document.querySelector(
+  ".app__form-footer__button--delete",
+);
+const cancelTaskBtt = document.querySelector(
+  ".app__form-footer__button--cancel",
+);
+const saveTaskBtt = document.querySelector(
+  ".app__form-footer__button--confirm",
+);
 
 let tasksList = JSON.parse(localStorage.getItem("tasks")) || [];
 let selectedTask = null;
+let liSelectedTask = null;
+let activeTask = null;
 
 addTaskBtt.addEventListener("click", () => {
   formAddTask.classList.toggle("hidden");
@@ -23,6 +33,7 @@ formAddTask.addEventListener("submit", (event) => {
 
   const task = {
     description: textareaTask.value,
+    completed: false,
   };
   if (selectedTask === null) {
     tasksList.push(task);
@@ -40,8 +51,8 @@ formAddTask.addEventListener("submit", (event) => {
 
 cancelTaskBtt.addEventListener("click", clearForm);
 
-deleteTaskBtt.addEventListener("click", ()=>{
-  tasksList = tasksList.filter(task => task !== selectedTask);
+deleteTaskBtt.addEventListener("click", () => {
+  tasksList = tasksList.filter((task) => task !== selectedTask);
   const tasksListInText = JSON.stringify(tasksList);
   localStorage.setItem("tasks", tasksListInText);
   clearForm();
@@ -88,6 +99,8 @@ function createTaskElement(task) {
     if (activeElement === li) {
       activeElement.classList.remove("app__section-task-list-item-active");
       taskDescriptionParagraph.textContent = "";
+      liSelectedTask = null;
+      activeTask = null;
       return;
     }
 
@@ -95,8 +108,16 @@ function createTaskElement(task) {
       activeElement.classList.remove("app__section-task-list-item-active");
     }
     taskDescriptionParagraph.textContent = task.description;
+    liSelectedTask = li;
+    activeTask = task;
     li.classList.add("app__section-task-list-item-active");
   };
+
+  if (task.completed === true) {
+    li.classList.remove("app__section-task-list-item-active");
+    li.classList.add("app__section-task-list-item-complete");
+    button.setAttribute("disabled", "disabled");
+  }
 
   return li;
 }
@@ -116,3 +137,13 @@ function clearForm() {
   selectedTask = null;
   formAddTask.classList.add("hidden");
 }
+
+document.addEventListener("focusEnd", () => {
+  if (liSelectedTask) {
+    
+    activeTask.completed = true;
+    const tasksListInText = JSON.stringify(tasksList);
+    localStorage.setItem("tasks", tasksListInText);
+    renderTasksList();
+  }
+});
