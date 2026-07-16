@@ -42,8 +42,7 @@ formAddTask.addEventListener("submit", (event) => {
     selectedTask.description = textareaTask.value;
   }
 
-  const tasksListInText = JSON.stringify(tasksList);
-  localStorage.setItem("tasks", tasksListInText);
+  updateLocalStorage();
 
   clearForm();
 
@@ -54,8 +53,7 @@ cancelTaskBtt.addEventListener("click", clearForm);
 
 deleteTaskBtt.addEventListener("click", () => {
   tasksList = tasksList.filter((task) => task !== selectedTask);
-  const tasksListInText = JSON.stringify(tasksList);
-  localStorage.setItem("tasks", tasksListInText);
+  updateLocalStorage();
   clearForm();
   renderTasksList();
 });
@@ -139,25 +137,27 @@ function clearForm() {
   formAddTask.classList.add("hidden");
 }
 
+function updateLocalStorage() {
+  const tasksListInText = JSON.stringify(tasksList);
+  localStorage.setItem("tasks", tasksListInText);
+}
+
 document.addEventListener("focusEnd", () => {
   if (liSelectedTask) {
     activeTask.completed = true;
-    const tasksListInText = JSON.stringify(tasksList);
-    localStorage.setItem("tasks", tasksListInText);
+    updateLocalStorage();
     renderTasksList();
   }
 });
 
 clearCompletedTaskBtt.addEventListener("click", () => {
   tasksList = tasksList.filter((task) => task.completed === false);
-  const tasksListInText = JSON.stringify(tasksList);
-  localStorage.setItem("tasks", tasksListInText);
+  updateLocalStorage();
   renderTasksList();
 });
 
-clearAllTaskBtt.addEventListener("click" , ()=> {
+clearAllTaskBtt.addEventListener("click", () => {
   tasksList = [];
-  const tasksListInText = JSON.stringify(tasksList);
-  localStorage.setItem("tasks", tasksListInText);
+  updateLocalStorage();
   renderTasksList();
-})
+});
