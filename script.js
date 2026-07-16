@@ -22,11 +22,15 @@ music.loop = true;
 endSound.loop = true;
 startSound.volume = 0.5;
 
-let focusTime = 15;
-let shortBreakTime = 300;
-let longBreakTime = 900;
-let timeInSeconds = focusTime;
+const FOCUS_DEFAULT = 15;
+const SHORT_DEFAULT = 300;
+const LONG_DEFAULT = 900;
 
+let focusTime = FOCUS_DEFAULT;
+let shortBreakTime = SHORT_DEFAULT;
+let longBreakTime = LONG_DEFAULT;
+
+let timeInSeconds = focusTime;
 let isRunning = false;
 let intervalId = null;
 
@@ -51,11 +55,11 @@ resetBtt.addEventListener("click", () => {
   const currentContext = html.getAttribute("data-context");
 
   if (currentContext === "focus") {
-    focusTime = 1500;
+    focusTime = FOCUS_DEFAULT;
   } else if (currentContext === "short-break") {
-    shortBreakTime = 300;
+    shortBreakTime = SHORT_DEFAULT;
   } else if (currentContext === "long-break") {
-    longBreakTime = 900;
+    longBreakTime = LONG_DEFAULT;
   }
 
   endSound.pause();
@@ -200,11 +204,11 @@ function removeHighlight() {
 
 function updateResetButtonVisibility() {
   const currentContext = html.getAttribute("data-context");
-  if (currentContext === "focus" && timeInSeconds !== 1500) {
+  if (currentContext === "focus" && timeInSeconds !== FOCUS_DEFAULT) {
     resetBtt.classList.remove("hidden");
-  } else if (currentContext === "short-break" && timeInSeconds !== 300) {
+  } else if (currentContext === "short-break" && timeInSeconds !== SHORT_DEFAULT) {
     resetBtt.classList.remove("hidden");
-  } else if (currentContext === "long-break" && timeInSeconds !== 900) {
+  } else if (currentContext === "long-break" && timeInSeconds !== LONG_DEFAULT) {
     resetBtt.classList.remove("hidden");
   } else {
     resetBtt.classList.add("hidden");
