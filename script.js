@@ -58,6 +58,8 @@ resetBtt.addEventListener("click", () => {
     longBreakTime = 900;
   }
 
+  endSound.pause();
+  endSound.currentTime = 0;
   resetTimer();
   updateStartPauseButtonState();
 });
