@@ -15,6 +15,8 @@ const cancelTaskBtt = document.querySelector(
 
 const clearCompletedTaskBtt = document.querySelector("#btn-remove-completed");
 
+const clearAllTaskBtt = document.querySelector("#btn-remove-all");
+
 let tasksList = JSON.parse(localStorage.getItem("tasks")) || [];
 let selectedTask = null;
 let liSelectedTask = null;
@@ -152,3 +154,10 @@ clearCompletedTaskBtt.addEventListener("click", () => {
   localStorage.setItem("tasks", tasksListInText);
   renderTasksList();
 });
+
+clearAllTaskBtt.addEventListener("click" , ()=> {
+  tasksList = [];
+  const tasksListInText = JSON.stringify(tasksList);
+  localStorage.setItem("tasks", tasksListInText);
+  renderTasksList();
+})
