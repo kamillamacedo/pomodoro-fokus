@@ -21,6 +21,8 @@ let tasksList = JSON.parse(localStorage.getItem("tasks")) || [];
 let selectedTask = null;
 let liSelectedTask = null;
 let activeTask = null;
+let isTimerRunning = false;
+let isTimerLessed = false;
 
 addTaskBtt.addEventListener("click", () => {
   formAddTask.classList.toggle("hidden");
@@ -92,9 +94,25 @@ function createTaskElement(task) {
   li.append(button);
 
   li.onclick = () => {
+    if (isTimerRunning === true) {
+      return;
+    }
+    if (isTimerLessed === true) {
+      let verification = window.confirm(
+        "You are changing tasks while the timer is running. Would you like to reset the timer and shift focus to another task?",
+      );
+      if (verification === true) {
+        const eventReset = new CustomEvent("requestTimerReset");
+        document.dispatchEvent(eventReset);
+      } else {
+        return;
+      }
+    }
+
     const activeElement = document.querySelector(
       ".app__section-task-list-item-active",
     );
+
     if (activeElement === li) {
       activeElement.classList.remove("app__section-task-list-item-active");
       taskDescriptionParagraph.textContent = "";
@@ -160,4 +178,21 @@ clearAllTaskBtt.addEventListener("click", () => {
   tasksList = [];
   updateLocalStorage();
   renderTasksList();
+});
+
+document.addEventListener("timerStart", () => {
+  isTimerRunning = true;
+});
+
+document.addEventListener("timerStop", () => {
+  isTimerRunning = false;
+});
+
+document.addEventListener("timerLessen", () => {
+  isTimerLessed = true;
+});
+
+document.addEventListener("timerClean", () => {
+  isTimerRunning = false;
+  isTimerLessed = false;
 });

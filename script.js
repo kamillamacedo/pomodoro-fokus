@@ -111,6 +111,8 @@ function toggleTimer() {
     textStartPauseBtt.innerText = "Start";
     bttIcon.src = "./images/play-arrow.png";
     pauseSound.play();
+    const eventStop = new CustomEvent("timerStop");
+    document.dispatchEvent(eventStop);
   } else {
     intervalId = setInterval(startTimer, 1000);
     startTimer();
@@ -118,11 +120,15 @@ function toggleTimer() {
     textStartPauseBtt.innerText = "Pause";
     bttIcon.src = "./images/pause.png";
     startSound.play();
+    const eventStart = new CustomEvent("timerStart");
+    document.dispatchEvent(eventStart);
   }
 }
 
 function startTimer() {
   timeInSeconds -= 1;
+  const timerLessenEvent = new CustomEvent("timerLessen");
+  document.dispatchEvent(timerLessenEvent);
   updateResetButtonVisibility();
   const currentContext = html.getAttribute("data-context");
   if (currentContext === "focus") {
@@ -145,6 +151,8 @@ function startTimer() {
       endSound.pause();
       endSound.loop = false;
     }, 6000);
+    const eventStop = new CustomEvent("timerStop");
+    document.dispatchEvent(eventStop);
 
     if (currentContext === "focus") {
       const event = new CustomEvent("focusEnd");
@@ -171,6 +179,10 @@ showTimer();
 
 function resetTimer() {
   stopCountDown();
+  const eventStop = new CustomEvent("timerStop");
+  document.dispatchEvent(eventStop);
+  const timerCleanEvent = new CustomEvent("timerClean");
+  document.dispatchEvent(timerCleanEvent);
   const currentContext = html.getAttribute("data-context");
   changeContext(currentContext);
 
@@ -208,3 +220,7 @@ function updateStartPauseButtonState() {
     startPauseBtt.disabled = false;
   }
 }
+
+document.addEventListener("requestTimerReset", () => {
+  resetBtt.click();
+});
