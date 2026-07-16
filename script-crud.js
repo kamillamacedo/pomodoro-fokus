@@ -12,9 +12,8 @@ const deleteTaskBtt = document.querySelector(
 const cancelTaskBtt = document.querySelector(
   ".app__form-footer__button--cancel",
 );
-const saveTaskBtt = document.querySelector(
-  ".app__form-footer__button--confirm",
-);
+
+const clearCompletedTaskBtt = document.querySelector("#btn-remove-completed");
 
 let tasksList = JSON.parse(localStorage.getItem("tasks")) || [];
 let selectedTask = null;
@@ -140,10 +139,16 @@ function clearForm() {
 
 document.addEventListener("focusEnd", () => {
   if (liSelectedTask) {
-    
     activeTask.completed = true;
     const tasksListInText = JSON.stringify(tasksList);
     localStorage.setItem("tasks", tasksListInText);
     renderTasksList();
   }
+});
+
+clearCompletedTaskBtt.addEventListener("click", () => {
+  tasksList = tasksList.filter((task) => task.completed === false);
+  const tasksListInText = JSON.stringify(tasksList);
+  localStorage.setItem("tasks", tasksListInText);
+  renderTasksList();
 });
