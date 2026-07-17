@@ -22,7 +22,7 @@ music.loop = true;
 endSound.loop = true;
 startSound.volume = 0.5;
 
-const FOCUS_DEFAULT = 15;
+const FOCUS_DEFAULT = 1500;
 const SHORT_DEFAULT = 300;
 const LONG_DEFAULT = 900;
 
