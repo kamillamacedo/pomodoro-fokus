@@ -4,7 +4,9 @@ const focusBtt = document.querySelector(".app__card-button--focus");
 const shortBtt = document.querySelector(".app__card-button--short");
 const longBtt = document.querySelector(".app__card-button--long");
 const startPauseBtt = document.querySelector(".app__card-primary-button");
-const textStartPauseBtt = document.querySelector(".app__card-primary-button span");
+const textStartPauseBtt = document.querySelector(
+  ".app__card-primary-button span",
+);
 const bttIcon = document.querySelector(".app__card-primary-button-icon");
 const timerDisplay = document.querySelector(".app__card-timer");
 const resetBtt = document.querySelector(".app__card-reset-button");
@@ -20,19 +22,15 @@ music.loop = true;
 endSound.loop = true;
 startSound.volume = 0.5;
 
-musicFocusInput.addEventListener("change", () => {
-  if (music.paused) {
-    music.play();
-  } else {
-    music.pause();
-  }
-});
+const FOCUS_DEFAULT = 1500;
+const SHORT_DEFAULT = 300;
+const LONG_DEFAULT = 900;
 
-let focusTime = 1500;
-let shortBreakTime = 300;
-let longBreakTime = 900;
+let focusTime = FOCUS_DEFAULT;
+let shortBreakTime = SHORT_DEFAULT;
+let longBreakTime = LONG_DEFAULT;
+
 let timeInSeconds = focusTime;
-
 let isRunning = false;
 let intervalId = null;
 
@@ -57,15 +55,25 @@ resetBtt.addEventListener("click", () => {
   const currentContext = html.getAttribute("data-context");
 
   if (currentContext === "focus") {
-    focusTime = 1500;
+    focusTime = FOCUS_DEFAULT;
   } else if (currentContext === "short-break") {
-    shortBreakTime = 300;
+    shortBreakTime = SHORT_DEFAULT;
   } else if (currentContext === "long-break") {
-    longBreakTime = 900;
+    longBreakTime = LONG_DEFAULT;
   }
 
+  endSound.pause();
+  endSound.currentTime = 0;
   resetTimer();
   updateStartPauseButtonState();
+});
+
+musicFocusInput.addEventListener("change", () => {
+  if (music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
 });
 
 function changeContext(context) {
@@ -107,6 +115,8 @@ function toggleTimer() {
     textStartPauseBtt.innerText = "Start";
     bttIcon.src = "./images/play-arrow.png";
     pauseSound.play();
+    const eventStop = new CustomEvent("timerStop");
+    document.dispatchEvent(eventStop);
   } else {
     intervalId = setInterval(startTimer, 1000);
     startTimer();
@@ -114,11 +124,15 @@ function toggleTimer() {
     textStartPauseBtt.innerText = "Pause";
     bttIcon.src = "./images/pause.png";
     startSound.play();
+    const eventStart = new CustomEvent("timerStart");
+    document.dispatchEvent(eventStart);
   }
 }
 
 function startTimer() {
   timeInSeconds -= 1;
+  const timerLessenEvent = new CustomEvent("timerLessen");
+  document.dispatchEvent(timerLessenEvent);
   updateResetButtonVisibility();
   const currentContext = html.getAttribute("data-context");
   if (currentContext === "focus") {
@@ -141,6 +155,13 @@ function startTimer() {
       endSound.pause();
       endSound.loop = false;
     }, 6000);
+    const eventStop = new CustomEvent("timerStop");
+    document.dispatchEvent(eventStop);
+
+    if (currentContext === "focus") {
+      const event = new CustomEvent("focusEnd");
+      document.dispatchEvent(event);
+    }
   }
 }
 
@@ -162,6 +183,10 @@ showTimer();
 
 function resetTimer() {
   stopCountDown();
+  const eventStop = new CustomEvent("timerStop");
+  document.dispatchEvent(eventStop);
+  const timerCleanEvent = new CustomEvent("timerClean");
+  document.dispatchEvent(timerCleanEvent);
   const currentContext = html.getAttribute("data-context");
   changeContext(currentContext);
 
@@ -179,11 +204,11 @@ function removeHighlight() {
 
 function updateResetButtonVisibility() {
   const currentContext = html.getAttribute("data-context");
-  if (currentContext === "focus" && timeInSeconds !== 1500) {
+  if (currentContext === "focus" && timeInSeconds !== FOCUS_DEFAULT) {
     resetBtt.classList.remove("hidden");
-  } else if (currentContext === "short-break" && timeInSeconds !== 300) {
+  } else if (currentContext === "short-break" && timeInSeconds !== SHORT_DEFAULT) {
     resetBtt.classList.remove("hidden");
-  } else if (currentContext === "long-break" && timeInSeconds !== 900) {
+  } else if (currentContext === "long-break" && timeInSeconds !== LONG_DEFAULT) {
     resetBtt.classList.remove("hidden");
   } else {
     resetBtt.classList.add("hidden");
@@ -199,3 +224,7 @@ function updateStartPauseButtonState() {
     startPauseBtt.disabled = false;
   }
 }
+
+document.addEventListener("requestTimerReset", () => {
+  resetBtt.click();
+});
