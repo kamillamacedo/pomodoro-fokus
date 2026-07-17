@@ -94,18 +94,30 @@ function createTaskElement(task) {
   li.append(button);
 
   li.onclick = () => {
-    if (isTimerRunning === true) {
-      return;
-    }
-    if (isTimerLessed === true) {
-      let verification = window.confirm(
-        "You are changing tasks while the timer is running. Would you like to reset the timer and shift focus to another task?",
-      );
-      if (verification === true) {
-        const eventReset = new CustomEvent("requestTimerReset");
-        document.dispatchEvent(eventReset);
-      } else {
+    if (liSelectedTask !== null) {
+      if (isTimerRunning === true) {
         return;
+      }
+      if (isTimerLessed === true) {
+        let verificationChange = window.confirm(
+          "You are changing tasks while the timer is running. Would you like to reset the timer and shift focus to another task?",
+        );
+        if (verificationChange === true) {
+          const eventReset = new CustomEvent("requestTimerReset");
+          document.dispatchEvent(eventReset);
+        } else {
+          return;
+        }
+      }
+    } else {
+      if (isTimerLessed === true) {
+        let verificationAssign = window.confirm(
+          "There is a timer currently running without a task. Would you like to assign this task to the ongoing session?",
+        );
+        if (verificationAssign === true) {
+        } else {
+          return;
+        }
       }
     }
 
@@ -164,6 +176,7 @@ document.addEventListener("focusEnd", () => {
   if (liSelectedTask) {
     activeTask.completed = true;
     updateLocalStorage();
+    isTimerLessed = false;
     renderTasksList();
   }
 });
