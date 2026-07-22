@@ -47,7 +47,8 @@
         <div class="app__card">
           <ul class="app__card-list">
             <li class="app__card-list-item">
-              <button
+              <button 
+                data-action="focus"
                 data-context="focus"
                 class="app__card-button app__card-button--focus active"
               >
@@ -56,6 +57,7 @@
             </li>
             <li class="app__card-list-item">
               <button
+                data-action="short-break"
                 data-context="short-break"
                 class="app__card-button app__card-button--short"
               >
@@ -64,6 +66,7 @@
             </li>
             <li class="app__card-list-item">
               <button
+                data-action="long-break"
                 data-context="long-break"
                 class="app__card-button app__card-button--long"
               >
@@ -76,6 +79,7 @@
             <li class="app__card-list-item">
               <label class="toggle">
                 <input
+                  data-action="toggle-music"
                   class="toggle-checkbox"
                   type="checkbox"
                   id="toggle-music"
@@ -90,7 +94,7 @@
             </li>
           </ul>
           <div class="app__card-primary-button-wrapper">
-            <button id="start-pause" class="app__card-primary-button">
+            <button data-action="toggle-timer" id="start-pause" class="app__card-primary-button">
               <img
                 class="app__card-primary-button-icon"
                 src="./images/play-arrow.png"
@@ -99,6 +103,7 @@
               <span>Start</span>
             </button>
             <button
+              data-action="reset"
               class="app__card-primary-button app__card-reset-button hidden"
             >
               Reset
