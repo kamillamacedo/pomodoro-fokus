@@ -23,15 +23,28 @@ const FOCUS_DEFAULT = 1500;
 const SHORT_DEFAULT = 300;
 const LONG_DEFAULT = 900;
 
-let focusTime = FOCUS_DEFAULT;
-let shortBreakTime = SHORT_DEFAULT;
-let longBreakTime = LONG_DEFAULT;
+const contextConfigs = {
+  "focus": {
+    defaultTimer: FOCUS_DEFAULT,
+    currentTime: FOCUS_DEFAULT,
+    titleText: `Optimize your productivity,<br>
+    <strong class="app__title-strong">dive into what matters.</strong>`,
+  },
+  "short-break": {
+    defaultTimer: SHORT_DEFAULT,
+    currentTime: SHORT_DEFAULT,
+    titleText: `Why don't you take a breath?<br>
+    <strong class="app__title-strong">Take a short break!</strong>`,
+  },
+  "long-break": {
+    defaultTimer: LONG_DEFAULT,
+    currentTime: LONG_DEFAULT,
+    titleText: `Time to come up for air.<br>
+    <strong class="app__title-strong">Take an extended break.</strong>`,
+  }
+}
 
-let timeInSeconds = focusTime;
-let isRunning = false;
-let intervalId = null;
-
-const timerActions ={
+const timerActions = {
   "focus": handleFocus,
   "short-break": handleShortBreak,
   "long-break": handleLongBreak ,
@@ -39,6 +52,11 @@ const timerActions ={
   "reset": handleReset,
   "toggle-music": toggleMusic,
 };
+
+let timeInSeconds = contextConfigs.focus.currentTime;
+let isRunning = false;
+let intervalId = null;
+
 
 timerCard.addEventListener("click", (event) => {
   const timerTargetBtt = event.target.closest("[data-action]");
@@ -69,14 +87,7 @@ function handleLongBreak () {
 
 function handleReset () {
   const currentContext = html.getAttribute("data-context");
-
-  if (currentContext === "focus") {
-    focusTime = FOCUS_DEFAULT;
-  } else if (currentContext === "short-break") {
-    shortBreakTime = SHORT_DEFAULT;
-  } else if (currentContext === "long-break") {
-    longBreakTime = LONG_DEFAULT;
-  }
+  contextConfigs[currentContext].currentTime = contextConfigs[currentContext].defaultTimer  
 
   endSound.pause();
   endSound.currentTime = 0;
@@ -96,33 +107,10 @@ function changeContext(context) {
   removeHighlight();
   html.setAttribute("data-context", context);
   banner.src = `./images/${context}.png`;
-  switch (context) {
-    case "focus":
-      const focusBtt = timerCard.querySelector("[data-action=focus]");
-      timeInSeconds = focusTime;
-      focusBtt.classList.add("active");
-      title.innerHTML = `Optimize your productivity,<br>
-                <strong class="app__title-strong">dive into what matters.</strong>`;
-      break;
-
-    case "short-break":
-      const shortBtt = timerCard.querySelector("[data-action=short-break]");
-      timeInSeconds = shortBreakTime;
-      shortBtt.classList.add("active");
-      title.innerHTML = `Why don't you take a breath?<br>
-                <strong class="app__title-strong">Take a short break!</strong>`;
-      break;
-
-    case "long-break":
-      const longBtt = timerCard.querySelector("[data-action=long-break]");
-      timeInSeconds = longBreakTime;
-      longBtt.classList.add("active");
-      title.innerHTML = `Time to come up for air.<br>
-                <strong class="app__title-strong">Take an extended break.</strong>`;
-      break;
-    default:
-      break;
-  }
+  timeInSeconds = contextConfigs[context].currentTime;
+  const activeBtt = timerCard.querySelector(`[data-action="${context}"]`);
+  activeBtt.classList.add("active");
+  title.innerHTML = contextConfigs[context].titleText;
   showTimer();
   updateResetButtonVisibility();
   updateStartPauseButtonState();
@@ -154,13 +142,7 @@ function startTimer() {
   document.dispatchEvent(timerLessenEvent);
   updateResetButtonVisibility();
   const currentContext = html.getAttribute("data-context");
-  if (currentContext === "focus") {
-    focusTime = timeInSeconds;
-  } else if (currentContext === "short-break") {
-    shortBreakTime = timeInSeconds;
-  } else if (currentContext === "long-break") {
-    longBreakTime = timeInSeconds;
-  }
+  contextConfigs[currentContext].currentTime = timeInSeconds;
 
   showTimer();
 
@@ -224,17 +206,7 @@ function removeHighlight() {
 function updateResetButtonVisibility() {
   const currentContext = html.getAttribute("data-context");
   const resetBtt = timerCard.querySelector("[data-action=reset]");
-  if (currentContext === "focus" && timeInSeconds !== FOCUS_DEFAULT) {
-    resetBtt.classList.remove("hidden");
-  } else if (
-    currentContext === "short-break" &&
-    timeInSeconds !== SHORT_DEFAULT
-  ) {
-    resetBtt.classList.remove("hidden");
-  } else if (
-    currentContext === "long-break" &&
-    timeInSeconds !== LONG_DEFAULT
-  ) {
+  if (timeInSeconds !== contextConfigs[currentContext].defaultTimer ) {
     resetBtt.classList.remove("hidden");
   } else {
     resetBtt.classList.add("hidden");
